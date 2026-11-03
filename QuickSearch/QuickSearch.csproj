@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <PackageIcon>QuickSearchIcon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/redy81/QuickSearch</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <ApplicationIcon>QuickSearchIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -24,6 +28,14 @@
     <Content Include="Icons\info2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="QuickSearchIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\QuickSearchIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
