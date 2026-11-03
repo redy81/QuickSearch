@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -93,6 +94,10 @@ namespace QuickSearch
         private string matchToolTip;
 
 
+        [ObservableProperty]
+        private string windowTitle;
+
+
         public ObservableCollection<SearchResultEntry> SearchResults { get; private set; }
 
         private CancellationTokenSource HaltRequest;
@@ -102,6 +107,8 @@ namespace QuickSearch
         public RelayCommand StartCmd { get; }
         public RelayCommand StopCmd { get; }
         public RelayCommand OpenFolderCmd { get; }
+        public RelayCommand AboutCmd { get; }
+        public RelayCommand ClearCmd { get; }
         public RelayCommand<object?> DoubleClickCmd { get; }
 
         // Code
@@ -111,6 +118,17 @@ namespace QuickSearch
             SearchString = string.Empty;
             StatusLeft = string.Empty;
             StatusCenter = string.Empty;
+
+            var ver = Assembly.GetExecutingAssembly().GetName().Version;
+
+            if ( ver is not null )
+            {
+                WindowTitle = $"QuickSearch v{ver.ToString()}";
+            }
+            else
+            {
+                WindowTitle = "QuickSearch v--.--";
+            }
 
             StartPath = Settings.Default.SearchPath;
             SearchString = Settings.Default.SearchString;
@@ -129,7 +147,8 @@ namespace QuickSearch
                             $"RegEx: use a regualar expression (case sensitive)";
 
             SearchResultTooltip = "Results of the search. You can double-click on an " + Environment.NewLine +
-                                  "entry to open an Explorer window with the file/directory selected.";
+                                  "entry to open an Explorer window with the file/directory selected." + Environment.NewLine +
+                                  "Sorting is available only when search is not running.";
 
             SearchTooltip = "Select the root path where to start the search from" + Environment.NewLine +
                             "and enter the search term. Simple, wildcard, and " + Environment.NewLine +
@@ -138,11 +157,17 @@ namespace QuickSearch
             StartCmd = new( Start );
             StopCmd = new( Stop );
             OpenFolderCmd = new( OpenFolder );
+            AboutCmd = new( ShowAbout );
+            ClearCmd = new( ClearData );
             DoubleClickCmd = new( HandleDoubleClick );
 
             IsRunning = false;
 
-            Application.Current.MainWindow.Closing += new CancelEventHandler( MainWindow_Closing );
+            // To avoid errors in the XAML Designer
+            if ( !DesignerProperties.GetIsInDesignMode( new DependencyObject() ) )
+            {
+                Application.Current.MainWindow.Closing += new CancelEventHandler( MainWindow_Closing );
+            }
         }
 
 
@@ -209,6 +234,24 @@ namespace QuickSearch
             {
                 StartPath = ofd.FolderName;
             }
+        }
+
+        private void ShowAbout()
+        {
+            AboutWindow aw = new();
+
+            aw.ShowDialog();
+        }
+
+        private void ClearData()
+        {
+            StartPath = string.Empty;
+            SearchString = string.Empty;
+            DoNotSearchSubfolders = false;
+            MatchType = 0;
+            IsCaseSensitive = false;
+
+            SaveParameters();
         }
 
         private void HandleDoubleClick( object? item )

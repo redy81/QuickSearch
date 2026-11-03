@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuickSearch"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="300" MinWidth="500">
+        Title="{Binding WindowTitle}" Height="450" Width="700" MinHeight="300" MinWidth="500">
 
     <Window.DataContext>
         <local:MainWindowVM/>
@@ -27,7 +27,8 @@
         <DockPanel Grid.Row="0" LastChildFill="False">
             <Button Width="120" Height="32" Margin="4" Content="Search" Command="{Binding StartCmd}" IsEnabled="{Binding IsRunning,Converter={StaticResource BoolNot}}"/>
             <Button Width="120" Height="32" Margin="4" Content="Stop" Command="{Binding StopCmd}" IsEnabled="{Binding IsRunning}"/>
-            <Button Width="120" Height="32" Margin="4" DockPanel.Dock="Right" Content="About"/>
+            <Button Width="96" Height="24" Margin="4" Content="Clear data" Command="{Binding ClearCmd}" IsEnabled="{Binding IsRunning,Converter={StaticResource BoolNot}}"/>
+            <Button Width="96" Height="24" Margin="4" DockPanel.Dock="Right" Content="About" Command="{Binding AboutCmd}"/>
         </DockPanel>
 
         <GroupBox Grid.Row="1" Margin="4" IsEnabled="{Binding IsRunning,Converter={StaticResource BoolNot}}">
@@ -85,7 +86,7 @@
                           IsReadOnly="True" 
                           HorizontalGridLinesBrush="LightGray"
                           VerticalGridLinesBrush="LightGray"
-                          CanUserSortColumns="True"
+                          CanUserSortColumns="{Binding IsRunning,Converter={StaticResource BoolNot}}"
                           d:ItemsSource="{d:SampleData}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding FullName}"/>
