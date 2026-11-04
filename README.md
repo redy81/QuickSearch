@@ -52,7 +52,7 @@ The software is pretty much complete, just some refinements are missing.
 
 ### Donation
 
-If you find this software useful, or it helped you to save time, you can offer me a coffee. :smile:
+If you find this software useful, or it helped you to save time, you can buy me a coffee.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=VNMV7XY9J5HBG)
 
