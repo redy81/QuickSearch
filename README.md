@@ -13,7 +13,7 @@ There is only one dialog, which looks as shown in the picture below.
 
 ![Screenshot of the software](qsScreen1.jpg)
 
-Components
+### Components
 
 1. Search button: to start the search.
 2. Stop button: stop a running search.
